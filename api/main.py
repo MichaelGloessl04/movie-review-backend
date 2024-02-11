@@ -1,7 +1,8 @@
+from typing import List
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from backend.crud.crud import create_engine, Crud
+from backend.crud import create_engine, Crud
 from . import api_types as ApiTypes
 
 resource = {}
@@ -22,6 +23,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.get("/movies/")
+def read_movies() -> List[ApiTypes.Movie]:
+    return resource["crud"].get_movies()
