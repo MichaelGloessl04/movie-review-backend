@@ -2,7 +2,8 @@ from typing import List
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from backend.crud import create_engine, Crud
+from crud import create_engine, Crud
+
 import api_types as ApiTypes
 
 resource = {}

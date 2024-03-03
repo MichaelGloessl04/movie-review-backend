@@ -1,10 +1,12 @@
 import pytest
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from backend.crud.crud import Crud
-from backend.crud.models import Movie, Genre, Director, User, Review
-from backend.crud.tests.populate import populate
+from crud.crud import Crud
+from crud.models import Movie, Genre, Director, User, Review
+
+from .populate import populate
 
 
 @pytest.fixture(scope="function")

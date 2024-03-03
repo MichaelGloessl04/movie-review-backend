@@ -1,7 +1,8 @@
 import pytest
 
-from backend.crud.crud import Crud
-from backend.crud.tests.populate import MOVIES, GENRES, DIRECTORS, USER, REVIEW
+from crud.crud import Crud
+
+from .populate import MOVIES, GENRES, DIRECTORS, USER, REVIEW
 
 BADVALUES = {
     "str": "string",
