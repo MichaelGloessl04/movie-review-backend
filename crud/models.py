@@ -12,7 +12,6 @@ class Movie(Base):
     name: Mapped[str]
     poster_file: Mapped[str]
     release_date: Mapped[int]
-    genre_id: Mapped[int] = mapped_column(ForeignKey('genre.id'))
     director_id: Mapped[int] = mapped_column(ForeignKey('director.id'))
 
 
@@ -20,6 +19,14 @@ class Genre(Base):
     __tablename__ = 'genre'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
+
+
+class MovieGenre(Base):
+    __tablename__ = 'movie_genre'
+    movie_id: Mapped[int] = mapped_column(ForeignKey('movie.id'),
+                                          primary_key=True)
+    genre_id: Mapped[int] = mapped_column(ForeignKey('genre.id'),
+                                          primary_key=True)
 
 
 class Director(Base):

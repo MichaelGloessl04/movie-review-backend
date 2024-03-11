@@ -26,4 +26,10 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/movies/")
 def read_movies() -> List[ApiTypes.Movie]:
-    return resource["crud"].get_movies()
+    crud = resource["crud"]
+    movies = crud.get_movies()
+
+    for movie in movies:
+        movie.genres = crud.get_movie_genres(movie.id)
+
+    return movies

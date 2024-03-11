@@ -2,7 +2,7 @@ import pytest
 
 from crud.crud import Crud
 
-from .populate import MOVIES, GENRES, DIRECTORS, USER, REVIEW
+from .populate import MOVIES, GENRES, MOVIEGENRE, DIRECTORS, USER, REVIEW
 
 BADVALUES = {
     "str": "string",
@@ -24,7 +24,6 @@ def test_add_movie(crud_in_memory: Crud):
         "name": "The Matrix",
         "poster_file": "the_matrix.jpg",
         "release_date": 19990331,
-        "genre_id": 1,
         "director_id": 1
     }
     _test_add(crud_in_memory.add_movie, crud_in_memory.get_movies, new_movie)
@@ -62,6 +61,24 @@ def test_add_invalid_genre(crud_in_memory: Crud):
     genre = {"name": "str"}
     good_genre = {"name": "Sci-Fi"}
     _test_add_invalid(genre, good_genre, crud_in_memory.add_genre)
+
+
+def test_get_movie_genres(crud_in_memory: Crud):
+    _test_get(crud_in_memory.get_movie_genres, MOVIEGENRE)
+
+
+def test_add_movie_genre(crud_in_memory: Crud):
+    new_movie_genre = {"movie_id": 1, "genre_id": 1}
+
+    _test_add(crud_in_memory.add_movie_genre, crud_in_memory.get_movie_genres,
+              new_movie_genre)
+
+
+def test_add_invalid_movie_genre(crud_in_memory: Crud):
+    movie_genre = {"movie_id": "int", "genre_id": "int"}
+    good_movie_genre = {"movie_id": 1, "genre_id": 1}
+    _test_add_invalid(movie_genre, good_movie_genre,
+                      crud_in_memory.add_movie_genre)
 
 
 def test_get_directors(crud_in_memory: Crud):
