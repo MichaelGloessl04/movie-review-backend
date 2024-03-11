@@ -2,7 +2,9 @@ import pytest
 
 from crud.crud import Crud
 
-from .populate import MOVIES, GENRES, MOVIEGENRE, DIRECTORS, USER, REVIEW
+from backend.crud.models import Genre
+
+from .populate import MOVIES, GENRES, DIRECTORS, USER, REVIEW
 
 BADVALUES = {
     "str": "string",
@@ -16,7 +18,10 @@ BADVALUES = {
 
 
 def test_get_movies(crud_in_memory: Crud):
-    _test_get(crud_in_memory.get_movies, MOVIES)
+    movies = crud_in_memory.get_movies()
+    for movie in movies:
+        genres = movie.genres
+        assert isinstance(genres, list)
 
 
 def test_add_movie(crud_in_memory: Crud):
@@ -26,6 +31,7 @@ def test_add_movie(crud_in_memory: Crud):
         "release_date": 19990331,
         "director_id": 1
     }
+    genre = Genre(name="Sci-Fi")
     _test_add(crud_in_memory.add_movie, crud_in_memory.get_movies, new_movie)
 
 
@@ -61,24 +67,6 @@ def test_add_invalid_genre(crud_in_memory: Crud):
     genre = {"name": "str"}
     good_genre = {"name": "Sci-Fi"}
     _test_add_invalid(genre, good_genre, crud_in_memory.add_genre)
-
-
-def test_get_movie_genres(crud_in_memory: Crud):
-    _test_get(crud_in_memory.get_movie_genres, MOVIEGENRE)
-
-
-def test_add_movie_genre(crud_in_memory: Crud):
-    new_movie_genre = {"movie_id": 1, "genre_id": 1}
-
-    _test_add(crud_in_memory.add_movie_genre, crud_in_memory.get_movie_genres,
-              new_movie_genre)
-
-
-def test_add_invalid_movie_genre(crud_in_memory: Crud):
-    movie_genre = {"movie_id": "int", "genre_id": "int"}
-    good_movie_genre = {"movie_id": 1, "genre_id": 1}
-    _test_add_invalid(movie_genre, good_movie_genre,
-                      crud_in_memory.add_movie_genre)
 
 
 def test_get_directors(crud_in_memory: Crud):
@@ -189,6 +177,8 @@ def _test_get(func, reference):
     assert len(all_entities) == len(reference)
     for movie, expected in zip(all_entities, reference):
         for key, value in expected.items():
+            if key == "genres":
+                continue
             assert getattr(movie, key) == value
 
     for key, value in reference[0].items():

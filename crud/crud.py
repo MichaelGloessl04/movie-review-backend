@@ -1,6 +1,6 @@
 from types import NoneType
 from sqlalchemy.orm import Session
-from backend.crud.models import (Base, Movie, Genre, MovieGenre,
+from backend.crud.models import (Base, Movie, Genre,
                                  Director, Review, User)
 
 
@@ -84,50 +84,6 @@ class Crud:
         if not isinstance(name, str):
             raise TypeError(f"Expected str, got {type(name).__name__}")
         return self._add(Genre(name=name))
-
-    def get_movie_genres(self,
-                         movie_id: int = None,
-                         genre_id: int = None) -> list[Genre]:
-        """
-        Retrieves a list of genres associated with a movie from the database.
-
-        Args:4
-            movie_id (int): The ID of the movie to retrieve the genres for.
-
-        Returns:
-            list[Genre]: A list of Genre objects.
-        """
-        if movie_id:
-            if not isinstance(movie_id, int):
-                raise TypeError(f"Expected int, got {type(movie_id).__name__}")
-            with Session(self._engine) as session:
-                return session.query(MovieGenre).filter(
-                    MovieGenre.movie_id == movie_id).all()
-        elif genre_id:
-            if not isinstance(genre_id, int):
-                raise TypeError(f"Expected int, got {type(genre_id).__name__}")
-            with Session(self._engine) as session:
-                return session.query(MovieGenre).filter(
-                    MovieGenre.genre_id == genre_id).all()
-        else:
-            return self._get(MovieGenre, None)
-
-    def add_movie_genre(self, movie_id: int, genre_id: int) -> MovieGenre:
-        """
-        Adds a new genre to a movie in the database.
-
-        Args:
-            movie_id (int): The ID of the movie to add the genre to.
-            genre_id (int): The ID of the genre to add to the movie.
-
-        Returns:
-            MovieGenre: The newly added MovieGenre object.
-        """
-        if not isinstance(movie_id, int):
-            raise TypeError(f"Expected int, got {type(movie_id).__name__}")
-        if not isinstance(genre_id, int):
-            raise TypeError(f"Expected int, got {type(genre_id).__name__}")
-        return self._add(MovieGenre(movie_id=movie_id, genre_id=genre_id))
 
     def get_directors(self, id: int = None) -> list[Director]:
         """

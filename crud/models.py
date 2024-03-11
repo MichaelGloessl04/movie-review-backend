@@ -1,9 +1,20 @@
-from sqlalchemy import ForeignKey, UniqueConstraint
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from __future__ import annotations
+
+from typing import List
+from sqlalchemy import Column, ForeignKey, Table, UniqueConstraint
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
     pass
+
+
+movie_genre = Table(
+    "movie_genre",
+    Base.metadata,
+    Column("movie_id", ForeignKey("movie.id"), primary_key=True),
+    Column("genre_id", ForeignKey("genre.id"), primary_key=True),
+)
 
 
 class Movie(Base):
@@ -13,20 +24,16 @@ class Movie(Base):
     poster_file: Mapped[str]
     release_date: Mapped[int]
     director_id: Mapped[int] = mapped_column(ForeignKey('director.id'))
+    genres: Mapped[List[Genre]] = relationship(secondary=movie_genre,
+                                               back_populates='movies')
 
 
 class Genre(Base):
     __tablename__ = 'genre'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-
-
-class MovieGenre(Base):
-    __tablename__ = 'movie_genre'
-    movie_id: Mapped[int] = mapped_column(ForeignKey('movie.id'),
-                                          primary_key=True)
-    genre_id: Mapped[int] = mapped_column(ForeignKey('genre.id'),
-                                          primary_key=True)
+    movies: Mapped[List[Movie]] = relationship(secondary=movie_genre,
+                                               back_populates='genres')
 
 
 class Director(Base):
