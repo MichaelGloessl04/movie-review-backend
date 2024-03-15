@@ -48,7 +48,7 @@ class Crud:
             raise TypeError(f"Expected str, got {type(name).__name__}")
         if not isinstance(poster_file, str):
             raise TypeError(f"Expected str, got {type(poster_file).__name__}")
-        if not isinstance(release_date, int):
+        if not isinstance(release_date, str):
             raise TypeError(f"Expected int, got {type(release_date).__name__}")
         if not isinstance(director_id, int):
             raise TypeError(f"Expected int, got {type(director_id).__name__}")
@@ -121,9 +121,9 @@ class Crud:
             raise TypeError(f"Expected str, got {type(first_name).__name__}")
         if not isinstance(last_name, str):
             raise TypeError(f"Expected str, got {type(last_name).__name__}")
-        if not isinstance(birth_date, int):
+        if not isinstance(birth_date, str):
             raise TypeError(f"Expected int, got {type(birth_date).__name__}")
-        if not isinstance(death_date, (int, NoneType)):
+        if not isinstance(death_date, (str, NoneType)):
             raise TypeError(
                 f"Expected int or NoneType, got {type(death_date).__name__}")
         if not isinstance(country_of_origin, str):

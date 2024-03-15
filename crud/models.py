@@ -22,7 +22,7 @@ class Movie(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     poster_file: Mapped[str]
-    release_date: Mapped[int]
+    release_date: Mapped[str]
     director_id: Mapped[int] = mapped_column(ForeignKey('director.id'))
     genres: Mapped[List[Genre]] = relationship(secondary=movie_genre,
                                                back_populates='movies')
@@ -41,8 +41,8 @@ class Director(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     first_name: Mapped[str]
     last_name: Mapped[str]
-    birth_date: Mapped[int]
-    death_date: Mapped[int] = mapped_column(nullable=True)
+    birth_date: Mapped[str]
+    death_date: Mapped[str] = mapped_column(nullable=True)
     country_of_origin: Mapped[str]
 
 
