@@ -2,7 +2,7 @@ from typing import List
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from crud import create_engine, Crud
+from crud import create_engine, Crud, Movie
 
 import api_types as ApiTypes
 
@@ -24,6 +24,19 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.get("/movies/")
+@app.get("/movie/")
 def read_movies() -> List[ApiTypes.Movie]:
     return resource["crud"].get_movies()
+
+
+@app.post("/movie/")
+def add_movie(movie: ApiTypes.MovieNoID) -> ApiTypes.Movie:
+    movie = resource["crud"].add_movie(
+        Movie(
+            title=movie.title,
+            release_date=movie.year,
+            genre_id=1,
+            director_id=movie.director,
+            poster_file=movie.poster_file,
+        ))
+    return movie

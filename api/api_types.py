@@ -8,12 +8,16 @@ class User(BaseModel):
     password: str
 
 
-class Movie(BaseModel):
-    id: int
+class MovieNoID(BaseModel):
     title: str
-    year: int
+    release_date: str
     genre: str
-    description: str
+    director: str
+    poster_file: str
+
+
+class Movie(MovieNoID):
+    id: int
 
 
 class Genre(BaseModel):

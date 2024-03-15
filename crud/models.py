@@ -9,9 +9,9 @@ class Base(DeclarativeBase):
 class Movie(Base):
     __tablename__ = 'movie'
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
+    title: Mapped[str]
     poster_file: Mapped[str]
-    release_date: Mapped[int]
+    release_date: Mapped[str]
     genre_id: Mapped[int] = mapped_column(ForeignKey('genre.id'))
     director_id: Mapped[int] = mapped_column(ForeignKey('director.id'))
 
