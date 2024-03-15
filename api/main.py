@@ -2,6 +2,8 @@ from typing import List
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
+from sqlalchemy.orm import sessionmaker
+
 from crud import create_engine, Crud
 
 import api_types as ApiTypes
@@ -14,7 +16,8 @@ async def lifespan(app: FastAPI):
     """start the character device reader
     """
     engine = create_engine("sqlite:///rdb.test.db")
-    resource["crud"] = Crud(engine)
+    session = sessionmaker(bind=engine)
+    resource["crud"] = Crud(engine, session)
     yield
     engine.dispose()
     resource.clear()

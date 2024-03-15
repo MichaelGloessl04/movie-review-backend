@@ -5,11 +5,12 @@ from backend.crud.models import (Base, Movie, Genre,
 
 
 class Crud:
-    def __init__(self, engine):
+    def __init__(self, engine, session):
         """
         Initializes the Crud class with the given database engine.
         """
         self._engine = engine
+        self._session = session
         Base.metadata.create_all(self._engine)
 
     def get_movies(self, id: int = None) -> list[Movie]:
@@ -29,7 +30,8 @@ class Crud:
                   name: str,
                   poster_file: str,
                   release_date: str,
-                  director_id: int) -> Movie:
+                  director_id: int,
+                  genres: list[str]) -> Movie:
         """
         Adds a new movie to the database.
 
@@ -49,14 +51,25 @@ class Crud:
         if not isinstance(poster_file, str):
             raise TypeError(f"Expected str, got {type(poster_file).__name__}")
         if not isinstance(release_date, str):
-            raise TypeError(f"Expected int, got {type(release_date).__name__}")
+            raise TypeError(f"Expected str, got {type(release_date).__name__}")
         if not isinstance(director_id, int):
             raise TypeError(f"Expected int, got {type(director_id).__name__}")
-        return self._add(Movie(
-                        name=name,
-                        poster_file=poster_file,
-                        release_date=release_date,
-                        director_id=director_id))
+        if not isinstance(genres, list):
+            raise TypeError(f"Expected list, got {type(genres).__name__}")
+        movie = self._add(Movie(
+            name=name,
+            poster_file=poster_file,
+            release_date=release_date,
+            director_id=director_id))
+        with self._session() as session:
+            for genre in genres:
+                genre = session.query(Genre).filter_by(name=genre).first()
+                if genre:
+                    movie.genres.append(genre)
+                else:
+                    genre = self.add_genre(name=genre)
+                    movie.genres.append(genre)
+            return self._add(movie)
 
     def get_genres(self, id: int = None) -> list[Genre]:
         """

@@ -12,8 +12,8 @@ from .populate import populate
 @pytest.fixture(scope="function")
 def crud_in_memory():
     engine = create_engine("sqlite:///:memory:")
-    crud = Crud(engine)
     session = sessionmaker(bind=engine)
+    crud = Crud(engine, session)
     populate(session, Genre)
     populate(session, Movie)
     populate(session, Director)
