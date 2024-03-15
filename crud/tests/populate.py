@@ -87,12 +87,12 @@ def populate(session, obj):
         mock_values = REVIEW
     with session() as session:
         if obj == Movie:
-            for movie in mock_values:
-                genres = movie["genres"]
-                movie = Movie(name=movie["name"],
-                              poster_file=movie["poster_file"],
-                              release_date=movie["release_date"],
-                              director_id=movie["director_id"])
+            for mock in mock_values:
+                genres = mock["genres"]
+                movie = Movie(name=mock["name"],
+                              poster_file=mock["poster_file"],
+                              release_date=mock["release_date"],
+                              director_id=mock["director_id"])
                 for genre_id in genres:
                     movie.genres.extend(
                         session.query(Genre).filter_by(id=genre_id).all())

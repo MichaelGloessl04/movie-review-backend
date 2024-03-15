@@ -19,4 +19,4 @@ def crud_in_memory():
     populate(session, Director)
     populate(session, User)
     populate(session, Review)
-    yield crud
+    yield crud, session
